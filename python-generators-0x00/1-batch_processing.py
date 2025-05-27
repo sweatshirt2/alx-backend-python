@@ -8,7 +8,7 @@ def stream_users_in_batches(batch_size: int):
     try:
         connection = connect_to_prodev()
         cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users")
+        cursor.execute("SELECT * FROM user_data")
 
         streamed_users = cursor.fetchmany(batch_size)
         while streamed_users:
@@ -29,3 +29,5 @@ def batch_processing(batch_size: int):
     # ? Fixed implementation
     for batch in stream_users_in_batches(batch_size):
         yield [user for user in batch if user["age"] > 25]
+
+    return
