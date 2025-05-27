@@ -8,6 +8,7 @@ def stream_users_in_batches(batch_size: int):
     try:
         connection = connect_to_prodev()
         cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users")
 
         streamed_users = cursor.fetchmany(batch_size)
         while streamed_users:
