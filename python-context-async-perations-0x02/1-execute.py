@@ -26,6 +26,6 @@ class ExecuteQuery:
     return False
 
 
-with ExecuteQuery() as execute_query:
+with ExecuteQuery('users') as execute_query:
   query_result = execute_query.execute_query("SELECT * FROM users WHERE age > ?", 25)
 

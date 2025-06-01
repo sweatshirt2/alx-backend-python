@@ -18,7 +18,7 @@ class DatabaseConnection:
     return False
 
 
-with DatabaseConnection() as connection:
+with DatabaseConnection('users') as connection:
   cursor = None
   try:
     cursor = connection.cursor()
