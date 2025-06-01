@@ -6,7 +6,7 @@ def with_db_connection(func):
 
     if len(args) == 2:
       connection = sqlite3.connect('users.db')
-      return_val = func(*args, **kwargs)
+      return_val = func(connection, *args, **kwargs)
       connection.close()
       return return_val
 
