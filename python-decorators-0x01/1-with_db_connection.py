@@ -5,11 +5,11 @@ def with_db_connection(func):
   def wrapper(*args, **kwargs):
 
     if len(args) == 2:
-      connection = sqlite.connect('users.db')
-      return_val = func(*args, **kwargs, user_id)
+      connection = sqlite3.connect('users.db')
+      return_val = func(*args, **kwargs)
       connection.close()
       return return_val
-    
+
   return wrapper
 
 
