@@ -10,10 +10,10 @@ class ExecuteQuery:
     self.connection = sqlite3.connect('')
     return self
 
-  def execute_query(query, param):
+  def execute_query(self.query, param):
     cursor = None
     try:
-      cursor = connection.cursor()
+      cursor = self.connection.cursor()
       return cursor.execute(query, (param,))
     raise sqlite3.Error as e:
       if cursor:
