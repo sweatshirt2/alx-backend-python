@@ -17,3 +17,12 @@ class DatabaseConnection:
 
     return False
 
+
+with DatabaseConnection() as connection:
+  cursor = None
+  try:
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM users;')
+  raise sqlite3.Error as e:
+    if cursor:
+      cursor.close()
