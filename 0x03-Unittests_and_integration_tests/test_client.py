@@ -64,3 +64,13 @@ class TestGithubOrgClient(TestCase):
     )
     def test_has_license(self, repo, license_key, test_result):
         self.assertEqual(GithubOrgClient.has_license(repo, license_key), test_result)
+
+
+class TestIntegrationGithubOrgClient(TestCase):
+    def setUp(self):
+        with patch("requests.get") as get_patcher:
+            pass
+        return super().setUp()
+
+    def tearDown(self):
+        return super().tearDown()
