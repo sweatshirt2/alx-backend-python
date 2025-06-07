@@ -68,9 +68,27 @@ class TestGithubOrgClient(TestCase):
 
 class TestIntegrationGithubOrgClient(TestCase):
     def setUp(self):
-        with patch("requests.get") as get_patcher:
-            pass
         return super().setUp()
 
     def tearDown(self):
         return super().tearDown()
+
+    def setUpClass(self):
+        return self.setUp()
+
+    def tearDownClass(self):
+        return self.tearDown()
+
+    @parameterized.expand(
+        [
+            (0, TEST_PAYLOAD[0]),
+            (1, TEST_PAYLOAD[0])(2, TEST_PAYLOAD[0])(3, TEST_PAYLOAD[0]),
+        ]
+    )
+    def get_patcher(self, test_index, test_payload):
+        with patch("requests.get") as mock_requests_get:
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = test_payload[test_index]
+
+            mock_requests_get.return_value = mock_response
