@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from unittest import TestCase
 from unittest.mock import patch, Mock, PropertyMock
 from parameterized import parameterized
@@ -50,7 +52,7 @@ class TestGithubOrgClient(TestCase):
         ) as mock__public_repos_url:
             mock__public_repos_url.return_value = test_payload["repos_url"]
             self.assertEqual(
-                GithubOrgClient("google")._public_repos_url,
+                GithubOrgClient(org_name)._public_repos_url,
                 "https://api.github.com/orgs/google/repos",
             )
 
