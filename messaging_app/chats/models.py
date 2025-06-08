@@ -1,22 +1,30 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import uuid
 
 
 class UserProfile(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    password = models.CharField(max_length=100)
     bio = models.TextField(blank=True)
-    pass
+
+    def set_password(self, raw_password):
+        return super().set_password(raw_password)
 
 
 class Conversation(models.Model):
-    first_user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name="first_user"
-    )
-    second_user_id = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name="second_user"
-    )
+    participants = models.ManyToManyField(UserProfile)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Message(models.Model):
-    conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
-    sender_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    content = models.TextField()
+    message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    message_body = models.TextField()
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(auto_now_add=True)
