@@ -3,11 +3,17 @@ from .views import (
     UserProfileListCreateAPIView,
     ConversationListCreateAPIView,
     MessageListCreateAPIView,
+    # Todo: explore these and how they have been setup in .views
+    ConversationViewSet,
+    MessageViewSet,
 )
 
 # Todo: explore how these could be used here
 # from rest_framework import routers
 # routers.DefaultRouter()
+
+# Todo: explore (no idea what it is)
+# NestedDefaultRouter
 
 urlpatterns = [
     path("users", UserProfileListCreateAPIView.as_view(), name="users_list_create"),

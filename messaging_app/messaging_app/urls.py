@@ -18,4 +18,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [path("admin/", admin.site.urls), path("api/", include("chats.urls"))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/", include("chats.urls")),
+    # Todo: explore what this is and how it works for auth
+    path("api-auth/", include("rest_framework.urls")),
+]
