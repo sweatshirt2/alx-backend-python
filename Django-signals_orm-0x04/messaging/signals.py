@@ -32,7 +32,7 @@ def message_edited(sender, instance: Message, created, **kwargs):
     if not created:
         old_message = Message.objects.get(pk=instance.pk)
         MessageHistory.objects.create(
-            message=instance, edited_by=instance.sender, content=instance.content
+            message=instance, edited_by=instance.sender, content=old_message.content
         )
         # message_history = instance.versions.all()
         message_history = MessageHistory.objects.filter(message=instance)
