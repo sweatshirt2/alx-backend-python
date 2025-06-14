@@ -1,5 +1,6 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 from .models import Message, Notification, MessageHistory
 
@@ -47,3 +48,8 @@ def message_edited(sender, instance: Message, **kwargs):
     message_history = MessageHistory.objects.filter(message=instance)
     for version in message_history:
         print(version.content, version.edited_at)
+
+
+@receiver(post_delete, sender=User)
+def user_deleted(sender, instance: User, **kwargs):
+    Message.objects.filter(user=instance).delete()
