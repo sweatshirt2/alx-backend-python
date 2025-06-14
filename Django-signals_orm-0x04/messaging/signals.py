@@ -20,7 +20,7 @@ def message_received(sender, instance: Message, created, **kwargs):
 
 
 @receiver(pre_save, sender=Message)
-def message_edited(sender, instance: Message, created, **kwargs):
+def message_edited(sender, instance: Message, **kwargs):
     """triggers creating a message history, logging message, editor information when a message is edited
 
     Kwargs:
@@ -29,13 +29,21 @@ def message_edited(sender, instance: Message, created, **kwargs):
 
     Return: None
     """
-    if not created:
+    if not instance.pk:
+        return
+    try:
         old_message = Message.objects.get(pk=instance.pk)
-        MessageHistory.objects.create(
-            message=instance, edited_by=instance.sender, content=old_message.content
-        )
-        # message_history = instance.versions.all()
-        message_history = MessageHistory.objects.filter(message=instance)
+    except Message.DoesNotExist:
+        return
 
-        for version in message_history:
-            print(version.content, version.edited_at)
+    if instance.content == old_message.content:
+        return
+
+    MessageHistory.objects.create(
+        message=instance, edited_by=instance.sender, content=old_message.content
+    )
+    instance.edited = True
+    # message_history = instance.versions.all()
+    message_history = MessageHistory.objects.filter(message=instance)
+    for version in message_history:
+        print(version.content, version.edited_at)
