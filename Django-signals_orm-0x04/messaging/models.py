@@ -10,6 +10,7 @@ class Message(models.Model):
         User, on_delete=models.CASCADE, related_name="received_messages"
     )
     content = models.TextField()
+    edited = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -20,3 +21,14 @@ class Notification(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="notifications"
     )
+
+
+class MessageHistory(models.Model):
+    message = models.ForeignKey(
+        Message, on_delete=models.CASCADE, related_name="versions"
+    )
+    edited_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="edited_messages"
+    )
+    content = models.TextField()
+    edited_at = models.DateTimeField(auto_now_add=True)
