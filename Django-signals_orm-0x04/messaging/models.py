@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Message(models.Model):
+    parent_message = models.ForeignKey(
+        "self", on_delete=models.SET_NULL, null=True, blank=True, related_name="replies"
+    )
     sender = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="sent_messages"
     )
