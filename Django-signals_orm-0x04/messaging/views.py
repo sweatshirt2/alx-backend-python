@@ -39,6 +39,15 @@ def delete_user(request: Request):
 @api_view(["GET"])
 @cache_page(60)
 def message_list(request: Request):
+    """get list of messages with their senders and receivers loaded | avoids N+1 queries
+
+    Kwargs:
+    None
+
+    Return: list of messages with their sender and receiver
+    """
+
+    """cached view for 60 seconds"""
     if request.method == "GET":
         messages = Message.objects.filter(
             Q(receiver=request.user) | Q(sender=request.user)
