@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from .managers import UnreadMessagesManager
+
 
 class Message(models.Model):
     parent_message = models.ForeignKey(
@@ -13,8 +15,12 @@ class Message(models.Model):
         User, on_delete=models.CASCADE, related_name="received_messages"
     )
     content = models.TextField()
+    unread = models.BooleanField(default=True)
     edited = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager
+    unread = UnreadMessagesManager()
 
 
 class Notification(models.Model):

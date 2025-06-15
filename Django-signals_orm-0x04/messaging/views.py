@@ -58,3 +58,17 @@ def message_detail(request: Request, pk: int):
         return Response({"messages": message_with_replies}, status=status.HTTP_200_OK)
 
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["GET"])
+def unread_messages(request: Request):
+    if request.method == "GET":
+        unread_messages = (
+            Message.unread.unread_for_user(request.user)
+            .only("content")
+            .select_related("sender")
+        )
+
+        return Response({"unread_messages": unread_messages}, status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
