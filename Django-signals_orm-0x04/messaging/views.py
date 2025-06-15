@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.views.decorators.cache import cache_page
 
 from .models import Message
 
@@ -36,6 +37,7 @@ def delete_user(request: Request):
 
 
 @api_view(["GET"])
+@cache_page(60)
 def message_list(request: Request):
     if request.method == "GET":
         messages = Message.objects.filter(
