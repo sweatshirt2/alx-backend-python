@@ -1,0 +1,25 @@
+# Ignore Python virtual environments
+venv/
+.venv/
+
+# Bytecode and cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment files (optional)
+.env
+*.env
+
+# OS / editor files
+.vscode/
+.DS_Store
+*.swp
+
+# Git & other VCS
+.git
+.gitignore
+
+# Docker-related
+Dockerfile
+.dockerignore
