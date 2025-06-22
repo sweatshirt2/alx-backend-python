@@ -2,7 +2,7 @@ FROM python:3.10
 
 WORKDIR /messaging_app
 
-COPY requirements.txt ./
+COPY Requirements.txt ./
 
 RUN apt-get update && apt-get install -y \
     build-essential \
