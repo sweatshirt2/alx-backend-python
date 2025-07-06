@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'estifanos/messaging'
+        IMAGE_TAG = 'latest'
+    }
+
+    tools {
+        python 'Python 3'
+    }
+
+    stages {
+        stage('Clone repo') {
+            steps {
+                git credentialsId: 'github-creds', url: 'https://github.com/estifanosbereket1/alx-backend-python.git'
+            }
+        }
+
+        stage('Show branch') {
+            steps {
+                sh 'git branch'
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip3 install --upgrade pip
+                    pip3 install pytest
+                    pip3 install -r messaging_app/requirements.txt || true
+                '''
+            }
+        }
+
+        stage('Run tests') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    pytest messaging_app/tests --junitxml=test-report.xml
+                '''
+            }
+        }
+
+        stage('Publish test report') {
+            steps {
+                junit 'test-report.xml'
+            }
+        }
+
+        stage('Build Docker image') {
+            steps {
+                sh '''
+                    docker build -t $IMAGE_NAME:$IMAGE_TAG messaging_app
+                '''
+            }
+        }
+
+        stage('Push Docker image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE_NAME:$IMAGE_TAG
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "✅ Jenkins pipeline complete."
+        }
+    }
+}
